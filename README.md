@@ -38,20 +38,6 @@ PGPointCloud et PgAdmin (*Navigateur d'objets* et *Éditeur de requêtes*).
   - Trouver la hauteur du Puy-de-Dôme
   - Enveloppes convexes/concaves des points par tranche d'altitude
 
-### Étape 4
-
-Calculer un profil d'élévation sur la route du Tramway du Puy-de-Dôme ( vecteur OSM / PC )
-
-### Étape 5
-
-Calcul de l'élévation du bâti dans le village adjacent ( bati OSM / élévation PC)
-
-### Étape ...
-
-- Détection de végétation avec les pulses ?
-- Visualisation de l'élévation avec QGIS 2.5D ?
-- Autres idées ?
-
 ## Les données utilisées
 
 Nous utiliserons les données du CRAIG, sur la zone de Clermont Ferrand, ainsi que des données OpenStreetMap.
