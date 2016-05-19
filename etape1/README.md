@@ -1,7 +1,7 @@
-# LAStools
+# libLAS
 
 Lors de cette première étape, nous allons manipuler des fichiers LAZ/LAS à
-l'aide des outils fournis par LAStools.
+l'aide des outils fournis par libLAS.
 
 Pour cela, rendez-vous dans le répertoire de travail de l'atelier etape1 :
 

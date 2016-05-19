@@ -208,7 +208,7 @@ select
     round(pc_get(pt, 'Z')) as alt
 from tmp
 where pc_get(pt, 'Classification') = 2
-order by alt desc limit 1;'')))
+order by alt desc limit 1;
 ```
 
 On obtient alors une altitude mesurée de **1463** mètres, soit seulement 2 mètres

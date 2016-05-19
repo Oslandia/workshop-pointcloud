@@ -22,7 +22,7 @@
 
 ### Étape 1
 
-Utilisation des LAStools (las2las, lasinfo, las2txt).
+Utilisation des outils de libLAS (las2las, lasinfo, las2txt).
 
 ### Étape 2
 
