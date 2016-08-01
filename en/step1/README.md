@@ -1,22 +1,23 @@
 # libLAS
 
-Lors de cette première étape, nous allons manipuler des fichiers LAZ/LAS à
-l'aide des outils fournis par libLAS.
+Our goal at this initial stage is to work with LAZ/LAS files thanks to the
+command line tools provided by libLAS.
 
-Pour cela, rendez-vous dans le répertoire de travail de l'atelier etape1 :
+Change the current working directory for the step1 :
+
 
 ```bash
-> cd <WORKSHOP_DIRECTORY>/etape1
+> cd <WORKSHOP_DIRECTORY>/step1
 ```
 
-Ce répertoire contient entre autre un fichier LAS compressé : *sample.laz*.
+This directory contains a LAZ compressed file: *sample.laz*.
 
-## Récupération d'informations
+## Retrive informations
 
-L'outil **lasinfo** permet de récupérer des informations sur un fichier non
-compressé *LAS* ou bien directement sur un fichier compressé *LAZ*.
+The **lasinfo** tool allows to retrive informations on a non compressed *LAS*
+file or on a compressed LAZ file.
 
-Exécutez la commande suivante dans un terminal :
+Run the next command:
 
 ```bash
 > lasinfo sample.laz
@@ -112,28 +113,28 @@ Exécutez la commande suivante dans un terminal :
   -------------------------------------------------------
 ```
 
-On en retire notamment les informations suivantes :
+Thanks to the **lasinfo** output, we have:
 
-  - la version du format LAS utilisé : 1.2
-  - la date de création : 323/2013
-  - le nombre de points : 1018103
-  - le fait que la donnée est compressée avec laszip
-  - les dimensions d'un point
-  - des informations sur la position, l'altitude
+  - the version of the LAS format currently used: 1.2
+  - the creation date: 323/2013
+  - the number of points: 1018103
+  - the kind of compression applied to the data
+  - dimensions representing a point
+  - various data on position, altitude, ...
   - ...
 
-## Décompression
+## Decompression
 
-Un fichier *LAZ* peut être décompressé grâce à l'outil **las2las**.
+A LAZ file can be decompressed thanks to the **las2las** tool.
 
-Exécutez la commande suivante dans un terminal :
+Run the next command:
 
 ```bash
 > las2las -i sample.laz -o sample.las
 ```
 
-En utilisant l'outil **lasinfo** sur le fichier **sample.las**, on observe que
-le fichier n'est plus compressé.
+By using the **lasinfo** tool on **sample.las**, we note that no compression
+is currently applied unlike the tests previously done.
 
 ```bash
 > lasinfo sample.las
@@ -144,20 +145,22 @@ Number of Points by Return:  683374 234643 78634 18231 3221
 ...
 ```
 
-## Conversion en ASCII
+## ASCII conversion
 
-Un fichier **LAS** est binaire et ne peut pas être lu en ouvrant un éditeur. Si
-on souhaite récupérer les données en ASCII :
+A **LAS** file contains binary data, so it can't be read by a text editor. Thus,
+if we want to retrieve some data in a human readable format, we have to use the
+**las2txt** tool:
 
 ```bash
 > las2txt -i sample.las -o sample.txt --parse xyzi --delimiter " "
 ```
 
-Grâce à cela, le fichier sample.txt va contenir les points définis par :
-  - x : position en x
-  - y : position en y
+Thanks to the previous command line, the *sample.txt* file is going to contain
+points defined according to the next dimensions:
+  - x : x position
+  - y : y position
   - z : altitude
-  - i : intensité du retour
+  - i : intensity
 
 ```bash
 > head sample.txt
