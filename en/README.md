@@ -1,62 +1,62 @@
-# Atelier gestion de données PointCloud
+# Point Cloud Workshop
 
-## Présentation générale
+## Introduction
 
 - Oslandia
-- Logistique
-- Environnement
+- Logistic
+- Working environment
 
-## Les concepts et les technologies utilisées
+## Concepts and technologies
 
-- Lidar et nuage de points
-- Éléments de volumétrie
+- LIDAR and point cloud
+- Amount of data
 - Technologies :
   - PostGIS
-  - PgPointcloud (schémas, pacths, types, ...)
-  - PDAL (pipeline, filtre, writers, ...)
+  - PgPointcloud (schemas, pacths, types, ...)
+  - PDAL (pipeline, filter, writers, ...)
   - PgAdmin
   - QGIS
 - Conclusion
 
-## Déroulé de l'atelier
+## Proceedings
 
-### Étape 1
+### Step 1
 
-Utilisation des outils de libLAS (las2las, lasinfo, las2txt).
+Use of libLAS tools (las2las, lasinfo, las2txt).
 
-### Étape 2
+### Step 2
 
-PGPointCloud et PgAdmin (*Navigateur d'objets* et *Éditeur de requêtes*).
+PGPointCloud and PgAdmin (*Object Browsers* and *Query Tool*).
 
-### Étape 3
+### Step 3
 
-- Visualiser la couverture des données avec QGIS
+- See the LIDAR data coverage through QGIS
 - Database manager
-- Requêtes "basiques" sur le nuage de point (filtrages, stats basiques)
-  - Extraction d'une zone polygonale
-  - Calculs de moyennes, max et min sur la zone
-  - Trouver la hauteur du Puy-de-Dôme
-  - Enveloppes convexes/concaves des points par tranche d'altitude
+- Simple queries to work with the point cloud (filtering, statistical data)
+  - Cropping
+  - Average, max and min computation
+  - Retrieve the altitude of the Puy-de-Dôme
+  - Convex and concave hull per altitude levels
 
-## Les données utilisées
+## Data
 
-Nous utiliserons les données du CRAIG, sur la zone de Clermont Ferrand, ainsi que des données OpenStreetMap.
+We'll use data from CRAIG on Clermont Ferrand area as well as data coming from OpenStreetMap.
 
-Le CRAIG offre un éventail large de données en OpenData, comme on peut le voir dans le catalogue : 
+CRAIG provides a wide range of Open Data, as can be seen in the catalogue:
 - http://ids.craig.fr/geocat/srv/eng/catalog.search
 
-Sont notamment offertes des données LIDAR sur différentes zones. On peut notamment les visualiser directement en ligne ici :
+In particular, some LIDAR data are provided on several areas. These can be directly viewed online within your web browser:
 - http://ids.craig.fr/carto/?wmc=contexts/dallage_opendata.wmc
 
-Et le FTP permet de télécharger les données brutes :
+And the FTP allows to download these data:
 - ftp://opendata.craig.fr/opendata/
 
-Par ailleurs, des webservices sont proposés, accessibles sur cette page :
+Moreover, some webservices are available and provided on the below web page:
 - http://ids.craig.fr/wxs/web/
 
-On utilisera notamment les couches WMS pour avoir un fond de plan dans QGIS :
+Otherwise, we'll use WMS layers to display a base map within QGIS:
 - http://ids.craig.fr/wxs/ows?service=wms&version=1.1.1&request=GetCapabilities
 
-Pour les données OSM, nous utiliserons les exports offerts par GeoFabrik, en téléchargeant et intégrant la donnée pour l'Auvergne :
+About OSM data, we'll use exported data provided by GeoFabrik, downloading and using data on the Auvergne area:
 - http://download.geofabrik.de/europe/france.html
 - Auvergne SHP : http://download.geofabrik.de/europe/france/auvergne-latest.shp.zip
