@@ -2,8 +2,7 @@
 
 ## LASzip
 
-Pour avoir le support LAZ dans libLAS, il faut dans un premier temps compiler
-LASzip :
+In order to have the LAZ support in libLAS, we need to compile LASzip:
 
 ```bash
 cd /usr/local/src
@@ -18,7 +17,7 @@ make install
 
 ## libLAS
 
-Puis compiler libLAS avec le support LASzip :
+Then we can compile libLAS with LASzip support:
 
 ```bash
 cd /usr/local/src
@@ -30,4 +29,4 @@ make
 make install
 ```
 
-Ici, c'est libLAS qui fournis les outils (las2las, las2txt, lasinfo, ...).
+In our case, lastools (las2las, las2txt, lasinfo, ...) are provided by libLAS.
