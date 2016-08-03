@@ -12,9 +12,9 @@ Change the current working directory for the step1 :
 
 This directory contains a LAZ compressed file: *sample.laz*.
 
-## Retrive informations
+## Retrieve information
 
-The **lasinfo** tool allows to retrive informations on a non compressed *LAS*
+The **lasinfo** tool allows to retrieve information on a non compressed *LAS*
 file or on a compressed LAZ file.
 
 Run the next command:

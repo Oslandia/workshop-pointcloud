@@ -26,7 +26,7 @@ Use of libLAS tools (las2las, lasinfo, las2txt).
 
 ### Step 2
 
-PGPointCloud and PgAdmin (*Object Browsers* and *Query Tool*).
+pgpointcloud and pgAdmin (*Object Browsers* and *Query Tool*).
 
 ### Step 3
 

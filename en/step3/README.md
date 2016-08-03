@@ -66,7 +66,7 @@ previously seen with pgAdmin:
 
 ## Display a patch content
 
-In order to retrieve points contained by the patch having the id *21761*:
+In order to retrieve points contained by the patch with the id *21761*:
 
 ```bash
 with tmp as (
@@ -130,7 +130,7 @@ with tmp as (
 select avg(z) from tmp;
 ```
 
-In these two cases, we have a mean altitude of about 1205.01 mètres for the
+In these two cases, we have a mean altitude of about 1205.01 meters for the
 patch *21761*.
 
 ## Minimum and maximum altitude over the layer

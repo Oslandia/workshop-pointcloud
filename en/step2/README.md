@@ -1,8 +1,8 @@
-# Pointcloud and pgAdmin
+# pgpointcloud and pgAdmin
 
 For this second step, we are going to use pgAdmin to explore the database named
 *foss4g*. Then, we will begin to run some SQL queries with some functions coming
-from the PgPointCloud extension.
+from the pgpointcloud extension.
 
 ## Database connection
 
@@ -30,14 +30,14 @@ about the *foss4g* database:
 
 For the *lidar* table, we can see that there is two columns:
   - *id* which is an integer field
-  - *pa* which is a pcpatch field: we retrieve here the PGPointCLoud pacthes!
+  - *pa* which is a pcpatch field: we retrieve here the pgpointcloud pacthes!
 
 ![alt text][pcpatch]
 [pcpatch]: imgs/pcpatch.png "lidar table"
 
 ## SQL Queries
 
-Go to the SQL quries editor *Tools -> Query Tool*. This tool allows you to write
+Go to the SQL queries editor *Tools -> Query Tool*. This tool allows you to write
 and run SQL queries.
 
 ![alt text][sql]
@@ -54,7 +54,7 @@ Considering that we have indicated to the *chipper* filter of PDAL to build
 pacthes of 1000 points, we are able to approximate the total number of points
 to **110,246 millions**.
 
-The *pointcloud* extension provides plenty of functions named *pc_XXXXXX*.
+The *pgpointcloud* extension provides plenty of functions named *pc_XXXXXX*.
 
 ![alt text][fct]
 [fct]: imgs/fct.png "Pointcloud functions"
