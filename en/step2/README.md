@@ -5,7 +5,7 @@ a pipeline.
 
 The online documentation is here : http://www.pdal.io/
 
-Change the current working directory for the step2 :
+Change the current working directory for the step2:
 
 ```bash
 > cd <WORKSHOP_DIRECTORY>/step2

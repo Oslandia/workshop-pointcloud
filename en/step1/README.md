@@ -193,7 +193,7 @@ To do that, we have to use the *--split-pts* argument.
 > las2las --split-pts 509051 sample.laz
 ```
 
-After running the command above, three files are created :
+After running the command above, three files are created:
 *output-1.las*, *output-2.las*, *output-3.las*.
 
 Examine why thanks to the **lasinfo** command.

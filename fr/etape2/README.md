@@ -1,82 +1,174 @@
-# Pointcloud et PgAdmin
+# Pipeline PDAL
 
-Pour cette deuxième étape, nous allons utiliser PgAdmin pour visualiser la base
-*foss4g*. Nous commencerons aussi à lancer quelques requêtes SQL simples en
-utilisant des fonctions pointcloud.
+Lors de cette deuxième étape, nous allons apprendre à utiliser PDAL en ligne
+de commande et notamment apprendre à construire une chaine de traitement.
 
-## Connexion à la base
-
-Dans un premier temps, lancez PgAdmin et connectez vous à la base *foss4g* en
-vous rendant dans *Fichier -> Ajouter un serveur*. Ci dessous les informations
-de connexion :
-  - IP : 37.187.164.233
-  - Port : 5433
-  - Base : foss4g
-  - User : foss4g
-  - Password : donné durant l'atelier
-
-## Navigateur d'objets
-
-Grâce au *Navigateur d'objets*, nous pouvons obtenir de nombreuses informations
-concernant la base *foss4g* :
-  - le nombre de tables ainsi que leurs noms
-  - inspecter le contenu des tables
-  - la liste des extensions
-  - les fonctions disponibles
-  - ...
-
-![alt text][nav]
-[nav]: imgs/nav.png "Navigateur d'objets"
-
-Concernant par exemple la table *lidar*, on peut voir qu'elle possède deux
-colonnes :
-  - *id* de type entier
-  - *pa* de type pcpatch : on retrouve ici les patchs PGPointcloud!
-
-![alt text][pcpatch]
-[pcpatch]: imgs/pcpatch.png "Table lidar"
-
-## Requêtes SQL
-
-Rendez vous dans l'éditeur de requêtes *Outils -> Editeur de requêtes*. Cet
-outil permet de lancer des requêtes SQL.
-
-![alt text][sql]
-[sql]: imgs/sql.png "Editeur de requêtes"
-
-Dans un premier temps, nous pouvons déterminer le nombre de patchs contenu dans
-la table *lidar* :
+Pour cela, rendez-vous dans le répertoire de travail de l'atelier etape2 :
 
 ```bash
-> SELECT count(pa) FROM lidar;
-110 246
+> cd <WORKSHOP_DIRECTORY>/etape2
 ```
 
-Sachant, que nous avons indiqué au filtre *chipper* de PDAL d'avoir des patchs
-de 1000 points environs, on peut estimer le nombre de points total à environ
-**110,246 millions**.
+Ce répertoire contient:
+  - 3 fichiers LAS *sample1.las*, *sample2.las* et *sample3.las*
+  - 2 pipes *pipe_merge.json* et *pipe_pg.json*
 
-L'extension *pointcloud* fournis de nombreuses fonctions préfixées par *pc_*.
+La documentation en ligne de PDAL est ici : http://www.pdal.io/
 
-![alt text][fct]
-[fct]: imgs/fct.png "Fonctions pointcloud"
+## Fusion de fichiers
 
-Nous pouvons obtenir le nombre exact de points grâce à la fonction pointcloud
-*pc_numpoints* :
+La première étape est d'écrire un fichier JSON décrivant la chaine de
+traitement. Dans notre cas, nous voulons fusionner plusieurs fichiers LAS
+en un seul nommé *merged.las*. Nous avons donc besoin de 2 éléments :
+  - un filtre capable de merger N fichiers
+  - un *writer* permettant d'écrire un nouveau fichier LAS
+
+Si nous voulons merger les fichiers *sample1.las* et *sample2.las*, la
+chaine de traitement doit ressembler à celle çi-dessous:
 
 ```bash
-> SELECT sum(pc_numpoints(pa)) from lidar;
-110 245 034
+{
+  "pipeline":[
+    {
+      "filename": "sample1.las",
+      "tag": "sample1"
+    },
+    {
+      "filename": "sample2.las",
+      "tag": "sample2"
+    },
+    {
+      "type": "filters.merge",
+      "inputs": ["sample1", "sample2"]
+    },
+    {
+      "type": "writers.las",
+      "filename": "merged.las"
+    }
+  ]
+}
 ```
 
-Nous pouvons aussi étudier le contenu d'un patch...
+Modifier le contenu du fichier *pipe_merge.json* afin de fusionner les 3 fichiers
+*sample1.las*, *sample2.las* et *sample3.las*. Ensuite, lancez la commande
+çi-dessous:
 
 ```bash
-> SELECT pc_astext(pc_explode(pa)) FROM lidar LIMIT 1;
+> pdal pipeline pipe_merge.json
 ```
 
-et obtenir un résumé (nombre de points, statistique, ...) :
+Un fichier *merged.las* est créé. Vous pouvez utiliser la commande **lasinfo**
+pour vérifier si le nombre de points est bien similaire aux attentes.
+
+Un autre moyen de fusionner des fichiers avec PDAL est d'utiliser la
+commande **pdal merge** :
 
 ```bash
-> SELECT pc_summary(pa) FROM lidar LIMIT 1;
+> pdal merge sample1.las sample2.las sample3.las merged2.las
+```
+
+## pgpointcloud writer
+
+Maintenant que nous avons un seul fichier LAS, nous voulons construire une
+chaine de traitement capable de remplir une base de données avec l'extension
+pgpointcloud.
+
+Pour construire des patchs de points, nous allons utiliser le filtre *chipper*.
+La chaine de traitement va alors ressembler à :
+
+```bash
+{
+  "pipeline":[
+    {
+      "type":"readers.las",
+      "filename":"merged.las"
+    },
+    {
+      "type":"filters.chipper",
+      "capacity":400
+    },
+    {
+      "type":"writers.pgpointcloud",
+      "connection":"dbname=XXXXXXXXXXXXXXXXXXXX user=postgres",
+      "table":"patches"
+    }
+  ]
+}
+```
+
+Remplacez le champ "dbname=XXXXXXXXXXXXXXXXXXXX" dans le fichier *pipe_pg.json*
+avec le nom de votre base de données puis lancez la commande suivante :
+
+```bash
+> createdb DATABASE_NAME
+> psql -d DATABASE_NAME -f schema.sql
+> pdal pipeline pipe_pg.json
+```
+
+Vous pouvez ensuite vous connecter à la base et récupérer par exemple la liste
+des relations :
+
+```bash
+> psql DATABASE_NAME
+psql (9.5.1)
+Type "help" for help.
+
+DATABASE_NAME=# \d
+                 List of relations
+ Schema |        Name        |   Type   |   Owner
+--------+--------------------+----------+-----------
+ public | geography_columns  | view     | oslandia
+ public | geometry_columns   | view     | oslandia
+ public | patches            | table    | oslandia
+ public | patches_id_seq     | sequence | oslandia
+ public | pointcloud_columns | view     | oslandia
+ public | pointcloud_formats | table    | oslandia
+ public | raster_columns     | view     | oslandia
+ public | raster_overviews   | view     | oslandia
+ public | spatial_ref_sys    | table    | oslandia
+(9 rows)
+```
+
+Si vous souhaitez compter le nombre de patchs ou bien le nombre de points
+présent en base :
+
+```bash
+DATABASE_NAME=# SELECT count(pa) FROM patches;
+ count
+-------
+  2546
+(1 row)
+```
+
+```bash
+DATABASE_NAME=# SELECT sum(pc_numpoints(pa)) from patches;
+   sum
+---------
+ 1018103
+(1 row)
+```
+
+Notons que le nombre de points obtenu est le même que celui retourné par
+**lasinfo** sur le fichier *merged.las* :
+
+```bash
+> lasinfo merged.las
+  ...
+  Number Var. Length Records:  None
+  Point Data Format:           3
+  Number of Point Records:     1018103
+  Compressed:                  False
+  ...
+```
+
+Vous pouvez aussi vérifier le nombre de points présent dans un patch pour
+vérifier si cela concorde avec celui indiqué dans la chaine de traitement
+décrite dans le fichier *pipe_pg.json* :
+
+```bash
+DATABASE_NAME=# SELECT pc_numpoints(pa) from patches limit 1;
+   sum
+---------
+ 400
+(1 row)
 ```
