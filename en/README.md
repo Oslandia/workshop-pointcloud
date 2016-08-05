@@ -12,9 +12,9 @@
 - Amount of data
 - Technologies :
   - PostGIS
-  - PgPointcloud (schemas, pacths, types, ...)
+  - pgpointcloud (schemas, pacths, types, ...)
   - PDAL (pipeline, filter, writers, ...)
-  - PgAdmin
+  - pgAdmin
   - QGIS
 - Conclusion
 

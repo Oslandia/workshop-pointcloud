@@ -18,8 +18,8 @@ This directory contains:
 ## Merge multiple files
 
 The first step is to write a file in JSON to describe the pipeline. In our case,
-we want to multiple LAS file, merge these files then write a new LAS file
-named *merged.las*. So, we'll need three elements:
+we want to merge multiple LAS files, then write a new LAS file named
+*merged.las*. So, we'll need two elements:
   - a filter to merge N files
   - a writer for the LAS output file
 
@@ -63,7 +63,7 @@ An other way to merge multiple files with PDAL is to use the **pdal merge**
 command:
 
 ```bash
-> pdal merge pdal merge sample1.las sample2.las sample3.las merged2.las
+> pdal merge sample1.las sample2.las sample3.las merged2.las
 ```
 
 ## pgpointcloud writer
@@ -94,8 +94,8 @@ pipeline looks like:
 }
 ```
 
-Replace the field "dbname=XXXXXXXXXXXXXXXXXXXX" within the file
-*pipe_pg.json* by your DATABASE_NAME and run the next command:
+Replace the field "dbname=XXXXXXXXXXXXXXXXXXXX" within the *pipe_pg.json* file
+by your DATABASE_NAME and run the next command:
 
 ```bash
 > createdb DATABASE_NAME
@@ -103,7 +103,7 @@ Replace the field "dbname=XXXXXXXXXXXXXXXXXXXX" within the file
 > pdal pipeline pipe_pg.json
 ```
 
-Than you may connect to the database and get the list of relations:
+Then you may connect to the database and get the list of relations:
 
 ```bash
 > psql DATABASE_NAME
@@ -155,4 +155,15 @@ tool on the *merged.las* file:
   Number of Point Records:     1018103
   Compressed:                  False
   ...
+```
+
+You can also check if the number of points per patch is well 400 as mentioned in
+the *pipe_pg.json* file:
+
 ```bash
+DATABASE_NAME=# SELECT pc_numpoints(pa) from patches limit 1;
+   sum
+---------
+ 400
+(1 row)
+```

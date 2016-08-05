@@ -1,6 +1,6 @@
 # pgpointcloud and pgAdmin
 
-For this second step, we are going to use pgAdmin to explore the database named
+For this third step, we are going to use pgAdmin to explore the database named
 *foss4g*. Then, we will begin to run some SQL queries with some functions coming
 from the pgpointcloud extension.
 

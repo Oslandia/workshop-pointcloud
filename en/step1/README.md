@@ -183,7 +183,7 @@ points defined according to the next dimensions:
 
 ## Split
 
-Thanks to the *las2las* tool, we can split a simple file in multiple files.
+Thanks to the **las2las** tool, we can split a simple file in multiple files.
 Either the split is done according to the number of points, or according a
 size in MB.
 

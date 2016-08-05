@@ -1,6 +1,6 @@
 # QGIS
 
-During this third stage, we are going to use QGIS as a visualization tool.
+During this fourth stage, we are going to use QGIS as a visualization tool.
 Moreover, we will run more complex SQL queries in order to get various
 information such as the Puy-De-Dôme altitude.
 
