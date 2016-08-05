@@ -1,0 +1,17 @@
+{
+  "pipeline":[
+    {
+      "type":"readers.las",
+      "filename":"merged.las"
+    },
+    {
+      "type":"filters.chipper",
+      "capacity":400
+    },
+    {
+      "type":"writers.pgpointcloud",
+      "connection":"dbname=XXXXXXXXXXXXXXXXXXXX user=postgres",
+      "table":"patches"
+    }
+  ]
+}

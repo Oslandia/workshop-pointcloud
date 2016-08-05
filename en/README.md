@@ -26,9 +26,13 @@ Use of libLAS tools (las2las, lasinfo, las2txt).
 
 ### Step 2
 
-pgpointcloud and pgAdmin (*Object Browsers* and *Query Tool*).
+Use of the PDAL pipeline.
 
 ### Step 3
+
+pgpointcloud and pgAdmin (*Object Browsers* and *Query Tool*).
+
+### Step 4
 
 - See the LIDAR data coverage through QGIS
 - Database manager
