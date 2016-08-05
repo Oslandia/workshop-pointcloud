@@ -2,7 +2,7 @@
 
 ## Présentation générale
 
-- Oslandia
+- Oslandia - pour toute information, support ou question, contactez infos+3d@oslandia.com
 - Logistique
 - Environnement
 

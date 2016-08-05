@@ -2,7 +2,7 @@
 
 ## Introduction
 
-- Oslandia
+- Oslandia - for all additional information, support or question, please contact infos+3d@oslandia.com
 - Logistic
 - Working environment
 
