@@ -131,7 +131,7 @@ select avg(z) from tmp;
 ```
 
 In these two cases, we have a mean altitude of about 1205.01 meters for the
-patch *21761*.
+patch *1*.
 
 ## Minimum and maximum altitude over the layer
 

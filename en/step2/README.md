@@ -49,8 +49,8 @@ like:
 }
 ```
 
-Modify the content of *pipe_merge.json* to merge *sample1*, *sample2* and
-*sample3* files. Then run the below command line:
+Modify the content of *pipe_merge.json* to merge *sample1.las*, *sample2.las*
+and *sample3.las* files. Then run the below command line:
 
 ```bash
 > pdal pipeline pipe_merge.json
@@ -114,15 +114,15 @@ DATABASE_NAME=# \d
                  List of relations
  Schema |        Name        |   Type   |   Owner
 --------+--------------------+----------+-----------
- public | geography_columns  | view     | blottiere
- public | geometry_columns   | view     | blottiere
- public | patches            | table    | blottiere
- public | patches_id_seq     | sequence | blottiere
- public | pointcloud_columns | view     | blottiere
- public | pointcloud_formats | table    | blottiere
- public | raster_columns     | view     | blottiere
- public | raster_overviews   | view     | blottiere
- public | spatial_ref_sys    | table    | blottiere
+ public | geography_columns  | view     | oslandia
+ public | geometry_columns   | view     | oslandia
+ public | patches            | table    | oslandia
+ public | patches_id_seq     | sequence | oslandia
+ public | pointcloud_columns | view     | oslandia
+ public | pointcloud_formats | table    | oslandia
+ public | raster_columns     | view     | oslandia
+ public | raster_overviews   | view     | oslandia
+ public | spatial_ref_sys    | table    | oslandia
 (9 rows)
 ```
 

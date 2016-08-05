@@ -138,7 +138,7 @@ Run the next command:
 > las2las -i sample.laz -o sample.las
 ```
 
-By using the **lasinfo** tool on **sample.las**, we note that no compression
+By using the **lasinfo** tool on *sample.las*, we note that no compression
 is currently applied unlike the tests previously done.
 
 ```bash
