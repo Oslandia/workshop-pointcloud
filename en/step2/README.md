@@ -94,30 +94,29 @@ pipeline looks like:
 }
 ```
 
-Replace the field "dbname=XXXXXXXXXXXXXXXXXXXX" within the *pipe_pg.json* file
-by your DATABASE_NAME and run the next command:
+Replace the password "password=XXXXXXXXXXXXXXXXXXXX" within the *pipe_pg.json* file with the one you have been given, as well as the destination table, to name it according to your name ( use a trigram prefix like vpi_patches ).
+
+Then run the pdal import command. Since we send the data to a remote server, this process can take some time.
 
 ```bash
-> createdb DATABASE_NAME
-> psql -d DATABASE_NAME -f schema.sql
-> pdal pipeline pipe_pg.json
+pdal pipeline pipe_pg.json
 ```
 
-Then you may connect to the database and get the list of relations:
+Then you may connect to the database with psql or pgadmin and get the list of relations. You should see something similar to the following using psql.
 
 ```bash
-> psql DATABASE_NAME
+> psql hekla.oslandia.net -p 5433 -U foss4g -d foss4g
 psql (9.5.1)
 Type "help" for help.
 
-DATABASE_NAME=# \d
+foss4g=# \d
                  List of relations
  Schema |        Name        |   Type   |   Owner
 --------+--------------------+----------+-----------
  public | geography_columns  | view     | oslandia
  public | geometry_columns   | view     | oslandia
- public | patches            | table    | oslandia
- public | patches_id_seq     | sequence | oslandia
+ public | vpi_patches        | table    | oslandia
+ public | vpi_patches_id_seq | sequence | oslandia
  public | pointcloud_columns | view     | oslandia
  public | pointcloud_formats | table    | oslandia
  public | raster_columns     | view     | oslandia
@@ -126,10 +125,10 @@ DATABASE_NAME=# \d
 (9 rows)
 ```
 
-If you want to count the number of patches and the number of points:
+If you want to count the number of patches and the number of points. Use the PgAdmin SQL window or the psql command line tool to execute the query.
 
 ```bash
-DATABASE_NAME=# SELECT count(pa) FROM patches;
+foss4g=# SELECT count(pa) FROM patches;
  count
 -------
   2546
@@ -137,7 +136,7 @@ DATABASE_NAME=# SELECT count(pa) FROM patches;
 ```
 
 ```bash
-DATABASE_NAME=# SELECT sum(pc_numpoints(pa)) from patches;
+foss4g=# SELECT sum(pc_numpoints(pa)) from patches;
    sum
 ---------
  1018103
@@ -157,11 +156,11 @@ tool on the *merged.las* file:
   ...
 ```
 
-You can also check if the number of points per patch is well 400 as mentioned in
+You can also check if the number of points per patch is 400 as mentioned in
 the *pipe_pg.json* file:
 
 ```bash
-DATABASE_NAME=# SELECT pc_numpoints(pa) from patches limit 1;
+foss4g=# SELECT pc_numpoints(pa) from patches limit 1;
    sum
 ---------
  400

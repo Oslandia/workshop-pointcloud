@@ -10,8 +10,8 @@
     },
     {
       "type":"writers.pgpointcloud",
-      "connection":"dbname=XXXXXXXXXXXXXXXXXXXX user=postgres",
-      "table":"patches"
+      "connection":"host=hekla.oslandia.net port=5433 dbname=foss4g user=foss4g password=XXXXXXXXXXXXXXX",
+      "table":"vpi_patches"
     }
   ]
 }
