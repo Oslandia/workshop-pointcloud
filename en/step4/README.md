@@ -86,6 +86,43 @@ Then you can load these points as a new layer in the QGIS canvas:
 ![alt text][points]
 [points]: imgs/points.png "Points"
 
+You can use QGIS styling capabilities to display the Z value of the points. Go to the styling window of the generated layer, and setup a graduated style using as an expression the z value of the geometry : @z($geometry)@.
+
+Now we do the same with the intensity value. We use the @PC_Get(pt pcpoint, dimname text)@ function to get the intensity value in our query. Run and style it using a graduated style on the intensity value.
+
+```sql
+with tmp as (
+    select
+        pc_explode(pa) as pts
+    from lidar
+    where id = 21761
+)
+select
+    row_number() over () as id
+    , pts::geometry(pointz, 2154) as geom
+    , PC_Get(pts, 'Intensity') as intensity
+    -- note that once the point is converted to a geometry we
+    -- can use any PostGIS function, like getting the z value
+    , ST_Z(pts::geometry(pointz, 2154)) as z
+from tmp;
+```
+
+Some points show much higher intensity than the others. Guess why ?
+
+To be able to answer this question, we need some context information. Install the QuickMapServices QGIS plugin and load the contributed Bing Map Satellite background layer : 
+
+- Open Plugins -> Manage and install plugins
+- Search for QuickMapServices
+- Install Plugin
+- Go to Web -> QuickMapServices -> Settings -> More Services -> Get contributed pack and save
+- Go to Web -> QuickMapServices -> Bing -> Bing Satellites
+
+Now answer the following questions :
+- Why some points have higher intensity ?
+- Why was the white car not detected ?
+- Try the same query on some other patches along the road
+
+
 ## Compression algorithm
 
 Just a quick reminder that with a dimensional compression, each dimension of
