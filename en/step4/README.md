@@ -86,9 +86,9 @@ Then you can load these points as a new layer in the QGIS canvas:
 ![alt text][points]
 [points]: imgs/points.png "Points"
 
-You can use QGIS styling capabilities to display the Z value of the points. Go to the styling window of the generated layer, and setup a graduated style using as an expression the z value of the geometry : @z($geometry)@.
+You can use QGIS styling capabilities to display the Z value of the points. Go to the styling window of the generated layer, and setup a graduated style using as an expression the z value of the geometry : `z($geometry)`.
 
-Now we do the same with the intensity value. We use the @PC_Get(pt pcpoint, dimname text)@ function to get the intensity value in our query. Run and style it using a graduated style on the intensity value.
+Now we do the same with the intensity value. We use the `PC_Get(pt pcpoint, dimname text)` function to get the intensity value in our query. Run and style it using a graduated style on the intensity value.
 
 ```sql
 with tmp as (
