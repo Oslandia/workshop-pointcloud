@@ -67,7 +67,7 @@ points within the lidar table:
 110 245 034
 ```
 
-Moreover, we can also studied the content of a patch:
+Moreover, we can also study the content of a patch:
 
 ```bash
 > SELECT pc_astext(pc_explode(pa)) FROM lidar LIMIT 1;
