@@ -226,25 +226,114 @@ Once you have found all the necessary information to fullfill the below SQL
 query, you can run it and compare the thus obtained altitude with the real
 one.
 
+This is a first version : we first explode the patches and filter points.
+
 ```sql
-with tmp as (
-select
-    pc_explode(pa) as pt
-from lidar
-where pc_intersects(pa,
-    st_geomfromtext('polygon
+/* getting the altitude */
+
+with points_in_area as (
+	select
+		pc_explode(pa) as pt
+	from 
+		lidar
+where 
+	pc_intersects(pa,
+		st_geomfromtext('polygon
         ((696645.68607813317794353 6519545.26375959813594818,
         696663.84967180131934583 6518613.49844292085617781,
         697659.1059435592032969 6518611.79729700554162264,
         697668.17463409807533026 6519546.03088010009378195,
         696645.68607813317794353 6519545.26375959813594818))',
-        "TODO_EPSG_CODE"))
+        'TODO_EPSG_CODE'))
 )
 select
-    round(pc_get(pt, 'TODO_DIMENSION')) as alt
-from tmp
-where pc_get(pt, 'Classification') = TODO_CLASSIFICATION_LEVEL
-order by alt desc limit 1;
+	pc_get(pt, 'TODO_DIMENSION') as alt
+from 
+	points_in_area
+where 
+	pc_get(pt, 'Classification') = TODO_CLASSIFICATION_LEVEL 
+order by 
+	alt desc 
+limit 1;
+```
+
+We can optimize this query, by filtering the patches a bit more before exploding, so as to narrow the search.
+As a first step we can find highest patches, and then do the real work.
+
+```sql
+-- Find patches with highest points regardless of classification
+select
+	id
+	, pc_get(pc_patchmax(pa), 'Z') as alt
+from 
+	lidar
+where 
+	pc_intersects(pa,
+	st_geomfromtext('polygon
+        ((696645.68607813317794353 6519545.26375959813594818,
+        696663.84967180131934583 6518613.49844292085617781,
+        697659.1059435592032969 6518611.79729700554162264,
+        697668.17463409807533026 6519546.03088010009378195,
+        696645.68607813317794353 6519545.26375959813594818))',
+        '2154'))
+order by 
+	alt desc 
+limit 10;
+```
+
+Now we can rewrite the previous query using this patch subselection.
+
+```sql
+-- Second version : filter patches first and explode after
+
+with highest_patches as (
+	select
+		id
+		-- running the query can be slow because of data transfer
+		-- try it without returning pa
+		, pa
+		-- max altitude of the patch
+		, pc_get(PC_PatchMax(pa), 'Z') as alt
+
+	from 
+		lidar
+	where 
+		pc_intersects(pa,
+			st_geomfromtext('polygon
+		((696645.68607813317794353 6519545.26375959813594818,
+		696663.84967180131934583 6518613.49844292085617781,
+		697659.1059435592032969 6518611.79729700554162264,
+		697668.17463409807533026 6519546.03088010009378195,
+		696645.68607813317794353 6519545.26375959813594818))',
+		'2154'))
+	-- get the highest patches
+	order by 
+		alt desc 
+	limit 10
+),
+-- now explode the patches as points
+highest_points as (
+	select
+		id as patch_id
+		, pc_explode(pa) as pt
+	from 
+		highest_patches
+)
+-- and filter the result
+select 	
+	-- get a unique id
+	row_number() over () as gid
+	, patch_id
+	, pc_get(pt, 'Z') as palt
+from 
+	highest_points
+where 
+	-- only the ground
+	pc_get(pt, 'Classification') = 2 
+-- the highest ground point
+order by 
+	palt desc 
+limit 1;
 ```
 
 ## Level curves
