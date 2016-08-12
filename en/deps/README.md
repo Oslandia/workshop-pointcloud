@@ -36,3 +36,21 @@ make install
 ```
 
 In our case, lastools (las2las, las2txt, lasinfo, ...) are provided by libLAS.
+
+
+# PDAL
+
+To compile PDAL with LAZ support, LASzip is necessary.
+
+As root ( @sudo -s@ ) :
+
+```bash
+cd /usr/local/src
+git clone https://github.com/PDAL/PDAL
+cd PDAL
+mkdir build
+cd build
+cmake -DWITH_LASZIP=ON -DBUILD_PLUGIN_PGPOINTCLOUD=ON ..
+make
+make install
+```
