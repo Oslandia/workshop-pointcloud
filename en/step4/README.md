@@ -54,12 +54,12 @@ open a new tab allowing you to write and run SQL queries.
 Through the SQL editor, we are able to run the same queries than those
 previously seen with pgAdmin:
 
-```bash
+```sql
 > SELECT COUNT(PA) FROM lidar;
 110 246
 ```
 
-```bash
+```sql
 > SELECT sum(pc_numpoints(pa)) from lidar;
 110 245 034
 ```
@@ -68,7 +68,7 @@ previously seen with pgAdmin:
 
 In order to retrieve points contained by the patch with the id *21761*:
 
-```bash
+```sql
 with tmp as (
     select
         pc_explode(pa) as pts
@@ -93,7 +93,7 @@ a *pcpatch* has its own compression algorithm, dynamically determined during the
 filling of the database. We can determined which algorithm is currently used
 for each of the dimensions thanks to the next query:
 
-```bash
+```sql
 select json_array_elements(pc_summary(pa)::json->'dims') from lidar where id = 1;
 ```
 
@@ -106,7 +106,7 @@ In fact, there is at least 2 ways to retrieve the average altitude of a patch.
 
 Either we use the *pc_summary* function:
 
-```bash
+```sql
 with tmp as (
     select
         json_array_elements(pc_summary(pa)::json->'dims') as dims
@@ -120,7 +120,7 @@ where dims->>'name' = 'Z';
 
 or we compute it:
 
-```bash
+```sql
 with tmp as (
     select
         pc_get(pc_explode(pa), 'z') as z
@@ -138,7 +138,7 @@ patch *1*.
 In order to determine the minimum and maximum values for the altitude over all
 patches of the layer, we can use the *pc_patchmin* and *pc_patchmax* functions:
 
-```bash
+```sql
 select
     min(pc_patchmin(pa, 'z')) as min,
     max(pc_patchmax(pa, 'z')) as max
@@ -186,7 +186,7 @@ Once you have found all the necessary information to fullfill the below SQL
 query, you can run it and compare the thus obtained altitude with the real
 one.
 
-```bash
+```sql
 with tmp as (
 select
     pc_explode(pa) as pt
@@ -212,7 +212,7 @@ order by alt desc limit 1;
 Fullfill the below query to retrieve the level of curves represented by concave
 hull:
 
-```bash
+```sql
 select
     contour
     , st_exteriorring(
@@ -232,7 +232,7 @@ By displaying the map and labels for the *contour* field, we have:
 
 The same thing can be done with convex hull:
 
-```bash
+```sql
 select
     contour
     , st_exteriorring(
