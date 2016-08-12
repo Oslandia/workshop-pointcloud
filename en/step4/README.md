@@ -122,6 +122,10 @@ Now answer the following questions :
 - Why was the white car not detected ?
 - Try the same query on some other patches along the road
 
+We can have a better view with the WMS layer provided by CRAIG ( 1px = 10 cm). 
+To do that, you just have to add a *WMS* layer and create a new connection with
+*http://wms.craig.fr/ortho* (does not imply authentification). Then, after
+selecting *site_puy_de_dome_2011*, click on *Add* button.
 
 ## Compression algorithm
 
@@ -192,8 +196,7 @@ bounding box. This bounding box can be visualized by loading the file named
 *puy.txt*. Note that we are working with the French projection system
 Lambert-93, also known as EPSG:2154.
 
-We can use the *Open Layers Plugin* to load a map and have a better look on
-our working area:
+We can use the same QuickMapServics plugin to load a map and have a better look on our working area, or the WMS service.
 
 ![alt text][box]
 [box]: imgs/box.png "Bounding box"
@@ -284,10 +287,8 @@ group by contour;
 ![alt text][convex]
 [convex]: imgs/convex.png "Convex Hull"
 
-A WMS layer may also be used to have an orthophotographic view. To do that, you
-just have to add a *WMS* layer and create a new connection with
-*http://wms.craig.fr/ortho* (does not imply authentification). Then, after
-selecting *site_puy_de_dome_2011*, click on *Add* button.
+
+With aerial imagery : 
 
 ![alt text][wms]
 [wms]: imgs/wms.png "Orthophotos"
