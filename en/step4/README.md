@@ -338,39 +338,89 @@ limit 1;
 
 ## Level curves
 
+We can use PostGIS functions to compute geometries given our points.
+
 Fullfill the below query to retrieve the level of curves represented by concave
-hull:
+hull. As a first try, you can use the following settings : 
+
+- 1300 as minimum altitude
+- 1460 as maximum altitude
+- 10 as level step
+
+Now try to change this settings, as well as the concave hull parameter.
 
 ```sql
+with dome_points as (
+    -- This is basically the same as before : get the points out of the patches
+    select
+        PC_explode(pa) as pt
+    from
+        lidar
+    where
+        pc_intersects(pa, st_geomfromtext('polygon((
+                        696645.68607813317794353 6519545.26375959813594818, 696663.84967180131934583 6518613.49844292085617781,
+                        697659.1059435592032969 6518611.79729700554162264 , 697668.17463409807533026 6519546.03088010009378195,
+                        696645.68607813317794353 6519545.26375959813594818))', '2154'))
+)
 select
-    contour
-    , st_exteriorring(
-        st_concavehull(
-            st_collect(d.geom),
+    -- level is used as id too
+    level
+    , st_concavehull(
+            st_collect(d.pt::geometry(PointZ, 2154)),
+            -- this is the 'concaveness' parameter
             0.99
-        )) as geom
-from dome_points d
-join generate_series(TODO_MAXIMUM_ALTITUDE, TODO_MINIMUM_ALTITUDE, TODO_STEP) as contour on contour = d.alt
-group by contour;
+        ) as geom
+from 
+	dome_points as d
+join 
+    -- generate a list of levels we want to see
+	generate_series(MINIMUM_ALTITUDE, MAXIMUM_ALTITUDE, LEVEL_STEP) as level 
+on 
+    -- get all points where altitude is equal to the level
+    level = PC_Get(d.pt, 'Z')
+group by 
+	level;
 ```
 
-By displaying the map and labels for the *contour* field, we have:
+The previous query gets polygons, which you can color with transparency and multiply effect for best result.
+We can also get only the ring using a specific PostGIS function. Find the function in PostGIS reference and try to get the following result.
+
+By displaying the map and labels for the *level* field, we have:
 
 ![alt text][concave]
 [concave]: imgs/concave.png "Concave Hull"
 
-The same thing can be done with convex hull:
+The same thing can be done with convex hull :
 
 ```sql
+with dome_points as (
+    -- This is basically the same as before : get the points out of the patches
+    select
+        PC_explode(pa) as pt
+    from
+        lidar
+    where
+        pc_intersects(pa, st_geomfromtext('polygon((
+                        696645.68607813317794353 6519545.26375959813594818, 696663.84967180131934583 6518613.49844292085617781,
+                        697659.1059435592032969 6518611.79729700554162264 , 697668.17463409807533026 6519546.03088010009378195,
+                        696645.68607813317794353 6519545.26375959813594818))', '2154'))
+)
 select
-    contour
-    , st_exteriorring(
-        st_convexhull(
-            st_collect(d.geom)
+    -- level is used as id too
+    level
+    , st_exteriorring(st_convexhull(
+            st_collect(d.pt::geometry(PointZ, 2154))
         )) as geom
-from dome_points d
-join generate_series(TODO_MAXIMUM_ALTITUDE, TODO_MINIMUM_ALTITUDE, TODO_STEP) as contour on contour = d.alt
-group by contour;
+from 
+	dome_points as d
+join 
+    -- generate a list of levels we want to see
+	generate_series(MINIMUM_ALTITUDE, MAXIMUM_ALTITUDE, LEVEL_STEP) as level 
+on 
+    -- get all points where altitude is equal to the level
+    level = PC_Get(d.pt, 'Z')
+group by 
+	level;
 ```
 
 ![alt text][convex]
