@@ -431,3 +431,88 @@ With aerial imagery : 
 
 ![alt text][wms]
 [wms]: imgs/wms.png "Orthophotos"
+
+## To the top by train
+
+There is a train climbing to the top of Puy-De-Dôme. you can find the tracks in the `railways` table.
+On the train path, we defined milestones ( or kilometric points ). They are in the table named *milestone_rail*.
+
+
+We can now compute the altitude at each milestone. We will obtain an elevation profile for the train line. We compute the elevation for a point as the average elevation value for a bounding box of 5 meters around the point ( a square, that is).
+
+```sql
+select 
+    -- id of the milestone / kp
+	mr.id as id_mr
+    -- distance from the start of the rail line
+	, mr.dist as dist
+
+	, pc_Get(
+        pc_PatchAvg(
+            -- See in PgPointCloud how we take advantage of this function
+            -- Use a bounding box of 5m
+            pc_Intersection(l.pa, st_Expand(mr.geom, 5)
+            )
+      ), 'Z') as alt
+from
+	lidar as l
+join
+	milestone_rail as mr
+on
+    -- only consider the patches which intersect the bounding box of our point
+	pc_Intersects(l.pa, st_Expand(mr.geom, 5));
+```
+
+- Try to plot the result with a spreadsheet tool, or matplotlib, to get the elevation profile. What can you say ?
+- Try to change the bounding box size to see the differences
+
+
+For the record, the kilometric points table has been created with the following query ( PostGIS only).
+
+```sql
+-- Generate kilometric points (milestones) along the railway
+
+-- drop table if exists milestone_rail;
+
+create table 
+    milestone_rail as
+
+-- Steps here : 
+-- 1/ Collect the geometries
+-- 2/ Merge the lines
+-- 3/ Interpolate the length measurement as M values
+-- 4/ Dump the points
+
+with points as (
+	select 
+		(st_dumppoints(
+			st_addMeasure(
+				st_linemerge(
+					st_collect(geom)
+				), 0, st_length(st_linemerge(st_collect(geom)))))
+		).* 
+    -- The three geometries of the railway to Puy-de-Dome (only geometries for way up)
+	from (
+		select 
+			geom 
+		from 
+			railways 
+		where 
+			gid in (2792, 1629, 1631)
+	) as r 
+)
+-- Now get the id ( should be the same as Path id
+-- and extract M value ( length from start at point )
+select 
+	row_number() over () as id
+	, path[1] as path_id
+	, st_m(geom) as dist
+	, geom
+from 
+	points 
+order by 
+	path_id;
+
+-- Index the points ( not really required here, the table is small)
+create index idx_milestone_rail_geom on milestone_rail using gist(geom);
+```
