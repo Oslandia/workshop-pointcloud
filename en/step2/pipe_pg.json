@@ -1,0 +1,17 @@
+{
+  "pipeline":[
+    {
+      "type":"readers.las",
+      "filename":"merged.las"
+    },
+    {
+      "type":"filters.chipper",
+      "capacity":400
+    },
+    {
+      "type":"writers.pgpointcloud",
+      "connection":"host=hekla.oslandia.net port=5433 dbname=foss4g user=foss4g password=XXXXXXXXXXXXXXX",
+      "table":"vpi_patches"
+    }
+  ]
+}

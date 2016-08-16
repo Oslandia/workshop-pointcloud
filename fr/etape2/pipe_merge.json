@@ -1,0 +1,20 @@
+{
+  "pipeline":[
+    {
+      "filename": "sample1.las",
+      "tag": "sample1"
+    },
+    {
+      "filename": "sample2.las",
+      "tag": "sample2"
+    },
+    {
+      "type": "filters.merge",
+      "inputs": ["sample1", "sample2"]
+    },
+    {
+      "type": "writers.las",
+      "filename": "merged.las"
+    }
+  ]
+}
