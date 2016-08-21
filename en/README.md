@@ -6,6 +6,16 @@
 - Logistic
 - Working environment
 
+## Things to do first
+
+In order not to loose time, we will take some actions first. Open a terminal and run the following commands.
+
+```bash
+wget -O workshop.zip https://codeload.github.com/Oslandia/workshop-pointcloud/zip/master
+unzip workshop.zip
+sudo sh workshop-pointcloud-master/en/deps/install_deps.sh
+```
+
 ## Concepts and technologies
 
 - LIDAR and point cloud
