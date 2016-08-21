@@ -87,16 +87,21 @@ pipeline looks like:
     },
     {
       "type":"writers.pgpointcloud",
-      "connection":"dbname=XXXXXXXXXXXXXXXXXXXX user=postgres",
-      "table":"patches"
+      "connection":"host=hekla.oslandia.net port=5433 dbname=foss4g user=foss4g password=XXXXXXXX",
+      "table":"xxx_patches"
     }
   ]
 }
 ```
 
-Replace the password "password=XXXXXXXXXXXXXXXXXXXX" within the *pipe_pg.json* file with the one you have been given, as well as the destination table, to name it according to your name ( use a trigram prefix like vpi_patches ).
+This example loads the `merged.las` file into a PostgreSQL database with PgPointCloud extension activated. Since we use a remote server here and share the bandwidth, we will not load the `merged.las` file, but a small subset ( the full dataset has already been loaded anyway for later use).
 
-Then run the pdal import command. Since we send the data to a remote server, this process can take some time.
+- Use the commands from last step to split `merged.las` into files of 25000 points
+- Replace the password=XXXXXX in the `pipe_pg.json` file with the one you have been given
+- Replace the destination table name with your name in it ( use a trigram prefix like `vpi_patches` ).
+- Replace the LAS data filename to load only the first of the subset files from the split command
+
+Then run the pdal import command below. 
 
 ```bash
 pdal pipeline pipe_pg.json
@@ -104,8 +109,14 @@ pdal pipeline pipe_pg.json
 
 Then you may connect to the database with psql or pgadmin and get the list of relations. You should see something similar to the following using psql.
 
+In order to ease the connection to the database, you can save the password for this connection. Once you have a `.pgpass` file, later connections to the database should not ask for a password. 
+
 ```bash
-> psql hekla.oslandia.net -p 5433 -U foss4g -d foss4g
+echo "hekla.oslandia.net:5433:foss4g:foss4g:XXXXXXXXXXX" >> ~/.pgpass
+```
+
+```bash
+> psql -h hekla.oslandia.net -p 5433 -U foss4g -d foss4g
 psql (9.5.1)
 Type "help" for help.
 
