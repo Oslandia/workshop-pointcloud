@@ -9,7 +9,7 @@ from the pgpointcloud extension.
 Firstly, you have to start pgAdmin. Then, connect to the *foss4g* database by
 clicking on *File -> Add Server...*. See below for detailed information
 required to establish the connection:
-  - IP : 37.187.164.233
+  - Host : hekla.oslandia.net
   - Port : 5433
   - Base : foss4g
   - User : foss4g
